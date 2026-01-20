@@ -65,7 +65,13 @@ async function scanFile(filePath: string): Promise<Omit<File, 'id'> | null> {
     const ext = path.extname(filePath).toLowerCase()
     const fileType = getFileType(ext)
 
-    if (!fileType) return null
+    // Debug logging
+    console.log(`Scanning: ${filePath}, ext: ${ext}, type: ${fileType}`)
+
+    if (!fileType) {
+      console.log(`Skipping file with unsupported extension: ${ext}`)
+      return null
+    }
 
     const filename = path.basename(filePath)
     const hash = await hashFile(filePath)
@@ -178,6 +184,11 @@ export async function scanFolder(
 ): Promise<ScanResult> {
   const { recursive = true, autoTag = true, onProgress } = options
 
+  console.log(`========================================`)
+  console.log(`Starting scan of folder: ${folderPath}`)
+  console.log(`Recursive: ${recursive}, AutoTag: ${autoTag}`)
+  console.log(`========================================`)
+
   const result: ScanResult = {
     indexed: 0,
     duplicates: 0,
@@ -200,6 +211,7 @@ export async function scanFolder(
   }
 
   const total = filesFound.length
+  console.log(`Found ${total} total files in directory`)
 
   // Report initial progress
   if (onProgress) {
