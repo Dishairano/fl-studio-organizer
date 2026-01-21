@@ -59,12 +59,14 @@
     "win": {
       "target": [
         {
-          "target": "nsis",
+          "target": "portable",
           "arch": ["x64"]
         }
       ],
-      "icon": "build/icon.ico",
-      "publisherName": "FL Studio Organizer"
+      "icon": "build/icon.ico"
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-Windows-Portable.${ext}"
     },
     "nsis": {
       "oneClick": false,

@@ -30,27 +30,33 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: |
           npm run build
-          npx electron-builder --win --x64
+          npx electron-builder --win portable --x64
+        timeout-minutes: 30
 
       - name: Build for Linux
         if: matrix.os == 'ubuntu-latest'
         run: |
           npm run build
-          npx electron-builder --linux --x64
+          npx electron-builder --linux AppImage --x64
+        timeout-minutes: 30
 
       - name: Upload Windows artifacts
         if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
           name: windows-build
-          path: release/**/FL*.exe
+          path: |
+            release/**/*.exe
+          retention-days: 90
 
       - name: Upload Linux artifacts
         if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v4
         with:
           name: linux-build
-          path: release/**/*.AppImage
+          path: |
+            release/**/*.AppImage
+          retention-days: 90
 
   release:
     needs: build
