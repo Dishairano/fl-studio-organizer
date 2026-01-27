@@ -1,0 +1,13 @@
+Hardwave Studios Suite
+Version: 1.0.0
+Release Date: January 27, 2026
+
+Components:
+- KickForge (Layer-based kick designer)
+- Melody Generator (AI-powered melody creation)
+- File Organizer (Sample library management)
+
+Authentication: Website-based (JWT)
+Subscription: Required (validated via API)
+
+Build: Electron 28 + React 18 + TypeScript
