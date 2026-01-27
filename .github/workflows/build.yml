@@ -17,22 +17,26 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
-        working-directory: ./
+        run: |
+          npm ci
+        env:
+          CI: true
 
       - name: Build Windows
         run: npm run build:win
-        working-directory: ./
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: windows-build
-          path: release/**/Hardwave*.exe
+          path: release/**/*.exe
+          if-no-files-found: error
 
   build-linux:
     runs-on: ubuntu-latest
@@ -44,20 +48,26 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm ci
+        env:
+          CI: true
 
       - name: Build Linux
         run: npm run build
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: linux-build
           path: release/**/*.AppImage
+          if-no-files-found: error
 
   build-mac:
     runs-on: macos-latest
@@ -69,20 +79,27 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm ci
+        env:
+          CI: true
 
       - name: Build macOS
         run: npm run build
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_IDENTITY_AUTO_DISCOVERY: false
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: mac-build
           path: release/**/*.dmg
+          if-no-files-found: error
 
   create-release:
     needs: [build-windows, build-linux, build-mac]
