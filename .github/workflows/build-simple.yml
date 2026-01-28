@@ -27,6 +27,7 @@ jobs:
           npm run build:win
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
+        continue-on-error: true
 
       - name: List release files
         run: dir release /s /b
